@@ -3,49 +3,63 @@
 #include <map>
 #include <string>
 #include <fstream>
-#include <windows.h>
-using namespace std;
+#include <unordered_map>
+
 
 
 int main()
 {
     setlocale(LC_ALL, "ru");
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
-    string buf;
-    map <char, int> mp = {{'а', 0}, {'б', 0}, { 'в', 0 }, { 'г', 0 }, { 'д', 0 }, { 'е', 0 }, { 'ё', 0 }, { 'ж', 0 }, { 'з', 0 }, { 'и', 0 }, { 'й', 0 }, { 'к', 0 }, { 'л', 0 }, { 'м', 0 }, { 'н', 0 }, { 'о', 0 }, { 'п', 0 }, { 'р', 0 }, { 'с', 0 }, { 'т', 0 }, { 'у', 0 }, { 'ф', 0 }, { 'х', 0 }, { 'ц', 0 }, { 'ч', 0 }, { 'ш', 0 }, { 'щ', 0 }, { 'ъ', 0 }, { 'ы', 0 }, { 'ь', 0 }, { 'э', 0 }, { 'ю', 0 }, { 'я', 0 }};
-    auto it = mp.begin();
 
-    ifstream fin;
-    fin.open("../text.txt");
+    std::string buf;
+    std::unordered_map <char, int> mp;
+    auto it = mp.begin();
+    
+    
+
+    std::ifstream fin;
+    fin.open("text.txt");
     if (!fin)
-        cout << "Файл не открыт\n\n";
+        std::cout << "Файл не открыт\n\n";
     else
-        cout << "Файл открыт!\n\n";
+        std::cout << "Файл открыт!\n\n";
 
     getline(fin, buf, '\0');
+    for (int i = 0; i < buf.length(); ++i) {
+        const auto result = mp.insert({buf[i], 1});
+        if(!result.second){
+            result.first->second += 1;
+        }
+        
+        // if('a'<= mp.insert(std::make_pair(buf[i], 0)).first->first && mp.insert(std::make_pair(buf[i], 0)).first->first <= 'z')
+        //     mp.insert(std::make_pair(buf[i], 0)).first->second++;
+    }
 
-    for (int i = 0; i < 33; it++, i++) {
+
+    /*for (int i = 0; i < 33; it++, i++) {
 
         for (int j = 0; j < buf.length(); j++) {
-            if (it->first  == buf[j])
+            if (it->first == buf[j])
                 mp[buf[j]]++;
-            else if('А' <=  buf[j] && buf[j] <= 'Я'){
+            else if ('А' <= buf[j] && buf[j] <= 'Я') {
                 buf[j] += 32;
                 mp[buf[j]];
 
 
             }
         }
-    }
+    }*/
 
 
-    ofstream fout;
+    std::ofstream fout;
     fout.open("../table.txt");
 
     auto itt = mp.begin();
     for (int j = 0; itt != mp.end(); itt++, j++) {
-        fout << j << ") Letter " << itt->first << ", Frequency " << itt->second << endl;
+       
+            std::cout << "Letter " << itt->first << ", Frequency " << itt->second << std::endl;
     }
 
+
 }
+
